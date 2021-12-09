@@ -1,4 +1,4 @@
-$fn = 1000;
+//$fn = 1000;
 
 // Units: mm
 mag_len = 2;
