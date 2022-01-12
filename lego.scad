@@ -1,4 +1,4 @@
-$fn = 50;
+/* $fn = 25; */
 
 // Units: mm
 lego_u = 7.97;
@@ -16,13 +16,35 @@ lego_axle_w = 1.6; // Width of one "arm"
 lego_axle_outer_r = 0.1;
 lego_axle_inner_r = 0.8;
 
-/* minkowski() { */
-    Lego_Axle(/*$fn=50,*/ 3*lego_u);
-    /* sphere(0.1); */
-/* } */
-/* Reverse_Fillet($fn=50, 10, 0.5, angle=5); */
+/* Pin_Hole(); */
+//Lego_Beam($fn=100, 2);
 
-// Outer fillets
+module Lego_Beam(length, pin_inner_tol=0, pin_outer_tol=0) {
+    difference() {
+        solid_beam(length*lego_u);
+        for(i = [0:length]) {
+            translate([lego_u*i,0,0]) Pin_Hole(inner_tol=pin_inner_tol, outer_tol=pin_outer_tol);
+        }
+    }
+
+    module solid_beam(length) {
+        cylinder(lego_beam_h, d=lego_beam_w+pin_outer_tol, center=true);
+        translate([length-lego_u,0,0]) cylinder(lego_beam_h, d=lego_beam_w+pin_outer_tol, center=true);
+        translate([(length-lego_u)/2,0,0]) cube([length-lego_u, lego_beam_w+pin_outer_tol, lego_beam_h], center=true);
+    }
+}
+
+module Pin_Hole(inner_tol=0, outer_tol=0) {
+    half();
+    mirror([0,0,1]) half();
+
+    module half() {
+        translate([0,0,lego_beam_h/4]) cylinder(lego_beam_h/2, d=lego_pin_hole_d+inner_tol, center=true);
+        translate([0,0,(lego_beam_h-lego_pin_hole_overhang_h)/2]) cylinder(lego_pin_hole_overhang_h, d=lego_pin_hole_overhang_d+outer_tol, center=true);
+    }
+}
+
+// FreeCAD breaks this
 module Lego_Axle(length) {
     difference() {
         group() {

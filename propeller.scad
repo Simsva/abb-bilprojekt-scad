@@ -1,11 +1,12 @@
-//$fn = 1000;
+$fn = 1000;
 
 // Units: mm
+mag_tol = 0.4;
 mag_len = 2;
-mag_rad = 3.1;
-arm_len = 12;
+mag_rad = (3.1+mag_tol)/2;
+arm_len = 9;
 arm_rad = mag_rad + 1.5/2;
-pin_rad = 2;
+pin_rad = 2/2;
 
 Propeller(arm_len, arm_rad, mag_len, mag_rad, pin_rad, arm_c=4);
 
